@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { Component, PropTypes } from 'react';
 import { RouteHandler, Link } from 'react-router';
 import PostsIndex from './posts_index';
+import { connect } from 'react-redux';
 
-export default class App extends React.Component {
+class App extends React.Component {
   render() {
     return (
       <div>
@@ -13,20 +14,7 @@ export default class App extends React.Component {
           </ul>
         </nav>
 
-        <PostsIndex posts={[
-          {
-            id: 1,
-            title: 'First post',
-            body: 'asdf',
-            featured: true
-          },
-          {
-            id: 2,
-            title: 'second post',
-            body: 'zcvzc',
-            featured: false
-          }
-        ]}>
+        <PostsIndex posts={this.props.visiblePosts}>
         </PostsIndex>
 
         <RouteHandler/>
@@ -34,3 +22,26 @@ export default class App extends React.Component {
     );
   }
 }
+
+App.propTypes = {
+  visiblePosts: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    title: PropTypes.string.isRequired,
+    body: PropTypes.string.isRequired,
+    featured: PropTypes.bool.isRequired
+  })),
+}
+
+function selectPosts(posts, filter) {
+  // TODO: Implement filter based on featured
+  return posts
+}
+
+function select(state) {
+  return {
+    visiblePosts: selectPosts(state.posts, state.visibilityFilter),
+    visibilityFilter: state.visibilityFilter
+  }
+}
+
+export default connect(select)(App);
