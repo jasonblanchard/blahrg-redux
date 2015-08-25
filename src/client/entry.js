@@ -23,7 +23,7 @@ store.dispatch(addPost(newPost));
 let secondPost = {id: 2, title: 'second', body: "Imma second post", featured: false}
 store.dispatch(addPost(secondPost));
 
-store.dispatch(setVisibilityFilter(VisibilityFilters.SHOW_FEATURED))
+//store.dispatch(setVisibilityFilter(VisibilityFilters.SHOW_FEATURED))
 store.dispatch(featurePost(1));
 
 unsubscribe();

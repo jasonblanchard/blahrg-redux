@@ -2,9 +2,13 @@ import React, { Component, PropTypes } from 'react';
 import { RouteHandler, Link } from 'react-router';
 import PostsIndex from './posts_index';
 import { connect } from 'react-redux';
+import { addPost, featurePost, setVisibilityFilter, VisibilityFilters } from '../actions/blog_actions';
 
 class App extends React.Component {
   render() {
+
+    const { dispatch, visiblePosts, visibilityFilter } = this.props;
+
     return (
       <div>
         <h1><Link to='app'>Blahrg</Link></h1>
@@ -14,7 +18,11 @@ class App extends React.Component {
           </ul>
         </nav>
 
-        <PostsIndex posts={this.props.visiblePosts}>
+        <PostsIndex
+          posts={visiblePosts}
+          onFilterChange={filter => dispatch(setVisibilityFilter(filter))}
+          visibilityFilter={visibilityFilter}
+        >
         </PostsIndex>
 
         <RouteHandler/>
@@ -33,8 +41,12 @@ App.propTypes = {
 }
 
 function selectPosts(posts, filter) {
-  // TODO: Implement filter based on featured
-  return posts
+  switch (filter) {
+  case VisibilityFilters.SHOW_ALL:
+    return posts;
+  case VisibilityFilters.SHOW_FEATURED:
+    return posts.filter(post => post.featured);
+  }
 }
 
 function select(state) {

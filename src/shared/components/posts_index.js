@@ -1,4 +1,5 @@
 import React from 'react';
+import VisibilityFilter from './post_visibility_filter';
 
 export default class PostIndex extends React.Component {
   render() {
@@ -15,6 +16,7 @@ export default class PostIndex extends React.Component {
     
     return (
       <div>
+        <VisibilityFilter onChange={this.props.onFilterChange} activeFilter={this.props.visibilityFilter}/>
         {this.props.posts.map(renderPost)}
       </div>
     );
