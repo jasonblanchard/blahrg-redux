@@ -11,13 +11,6 @@ class App extends React.Component {
 
     return (
       <div>
-        <h1><Link to='app'>Blahrg</Link></h1>
-        <nav>
-          <ul>
-            <li><Link to='about'>About</Link></li>
-          </ul>
-        </nav>
-
         <PostsIndex
           posts={visiblePosts}
           onFilterChange={filter => dispatch(setVisibilityFilter(filter))}
