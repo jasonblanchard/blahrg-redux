@@ -8,7 +8,7 @@ import { addPost, featurePost, setVisibilityFilter, VisibilityFilters } from '..
 class BlogContainer extends React.Component {
   render() {
 
-    const { actions, visiblePosts, allPosts, visibilityFilter } = this.props;
+    const { actions, visiblePosts, allPosts, activePost, visibilityFilter } = this.props;
 
     return (
       <div>
@@ -17,6 +17,7 @@ class BlogContainer extends React.Component {
           allPosts={allPosts}
           onFilterChange={filter => actions.setVisibilityFilter(filter)}
           visibilityFilter={visibilityFilter}
+          activePost={activePost}
         />
       </div>
     );
@@ -41,11 +42,17 @@ function selectPosts(posts, filter) {
   }
 }
 
-function mapStateToProps(state) {
+function selectActivePost(posts, id) {
+  // TODO fetch it if it's not in posts
+  return posts.find(post => post.id === Number(id));
+}
+
+function mapStateToProps(state, ownProps) {
   return {
     allPosts: state.posts,
     visiblePosts: selectPosts(state.posts, state.visibilityFilter),
-    visibilityFilter: state.visibilityFilter
+    visibilityFilter: state.visibilityFilter,
+    activePost: selectActivePost(state.posts, ownProps.params.postId)
   }
 }
 
