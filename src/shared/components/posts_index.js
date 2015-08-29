@@ -1,5 +1,6 @@
 import React from 'react';
 import VisibilityFilter from './post_visibility_filter';
+import { Link } from 'react-router';
 
 export default class PostIndex extends React.Component {
   render() {
@@ -7,7 +8,7 @@ export default class PostIndex extends React.Component {
     function renderPost(post) {
       return (
         <div key={post.id}>
-          <h2>{post.title}</h2>
+          <Link to='post' params={{postId: post.id}}><h2>{post.title}</h2></Link>
           <p>{post.body}</p>
           <p>Featured: {post.featured.toString()}</p>
         </div>

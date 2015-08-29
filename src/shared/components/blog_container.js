@@ -4,27 +4,25 @@ import PostsIndex from './posts_index';
 import { connect } from 'react-redux';
 import { addPost, featurePost, setVisibilityFilter, VisibilityFilters } from '../actions/blog_actions';
 
-class App extends React.Component {
+class BlogContainer extends React.Component {
   render() {
 
-    const { dispatch, visiblePosts, visibilityFilter } = this.props;
+    const { dispatch, visiblePosts, allPosts, visibilityFilter } = this.props;
 
     return (
       <div>
-        <PostsIndex
+        <RouteHandler
           posts={visiblePosts}
+          allPosts={allPosts}
           onFilterChange={filter => dispatch(setVisibilityFilter(filter))}
           visibilityFilter={visibilityFilter}
-        >
-        </PostsIndex>
-
-        <RouteHandler/>
+        />
       </div>
     );
   }
 }
 
-App.propTypes = {
+BlogContainer.propTypes = {
   visiblePosts: PropTypes.arrayOf(PropTypes.shape({
     id: PropTypes.number.isRequired,
     title: PropTypes.string.isRequired,
@@ -44,9 +42,10 @@ function selectPosts(posts, filter) {
 
 function select(state) {
   return {
+    allPosts: state.posts,
     visiblePosts: selectPosts(state.posts, state.visibilityFilter),
     visibilityFilter: state.visibilityFilter
   }
 }
 
-export default connect(select)(App);
+export default connect(select)(BlogContainer);
