@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import { bindActionCreators } from 'redux';
 import { RouteHandler, Link } from 'react-router';
 import PostsIndex from './posts_index';
 import { connect } from 'react-redux';
@@ -7,14 +8,14 @@ import { addPost, featurePost, setVisibilityFilter, VisibilityFilters } from '..
 class BlogContainer extends React.Component {
   render() {
 
-    const { dispatch, visiblePosts, allPosts, visibilityFilter } = this.props;
+    const { actions, visiblePosts, allPosts, visibilityFilter } = this.props;
 
     return (
       <div>
         <RouteHandler
           posts={visiblePosts}
           allPosts={allPosts}
-          onFilterChange={filter => dispatch(setVisibilityFilter(filter))}
+          onFilterChange={filter => actions.setVisibilityFilter(filter)}
           visibilityFilter={visibilityFilter}
         />
       </div>
@@ -40,7 +41,7 @@ function selectPosts(posts, filter) {
   }
 }
 
-function select(state) {
+function mapStateToProps(state) {
   return {
     allPosts: state.posts,
     visiblePosts: selectPosts(state.posts, state.visibilityFilter),
@@ -48,4 +49,10 @@ function select(state) {
   }
 }
 
-export default connect(select)(BlogContainer);
+function mapDispatchToProps(dispatch) {
+  return {
+    actions: bindActionCreators({addPost, featurePost, setVisibilityFilter}, dispatch)
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(BlogContainer);
