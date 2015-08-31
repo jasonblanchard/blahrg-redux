@@ -11,11 +11,12 @@ export default class RootContainer extends React.Component {
           <ul>
             <li><Link to='about'>About</Link></li>
             <li><Link to='blog'>Blog</Link></li>
+            <li><Link to='newPost'>New Post</Link></li>
           </ul>
         </nav>
 
         <div>
-          <RouteHandler />
+          <RouteHandler {...this.props} />
         </div>
       </div>
     );

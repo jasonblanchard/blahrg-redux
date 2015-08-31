@@ -1,6 +1,7 @@
 import React from 'react';
 import VisibilityFilter from './post_visibility_filter';
 import TagVisibilityFilter from './tag_visibility_filter';
+import PendingPost from './pending_post';
 import { Link } from 'react-router';
 
 export default class PostIndex extends React.Component {
@@ -37,11 +38,21 @@ export default class PostIndex extends React.Component {
       );
     }
 
+    let renderPendingPost = () => {
+      if (this.props.pendingPost.title !== undefined) {
+        return (
+          <PendingPost post={this.props.pendingPost}/>
+        );
+      }
+    }
+    
     return (
       <div>
         <VisibilityFilter onChange={this.props.onFilterChange} activeFilter={this.props.visibilityFilter}/>
 
         <TagVisibilityFilter onChange={this.props.onTagFilterChange} tagFilter={this.props.tagFilter} allTags={this.props.allTags}/>
+
+        {renderPendingPost()}
 
         {this.props.visiblePosts.map(renderPost)}
       </div>

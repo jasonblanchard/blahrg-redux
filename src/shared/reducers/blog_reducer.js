@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import { ADD_POST, FEATURE_POST, SET_VISIBILITY_FILTER, SET_TAG_FILTER, VisibilityFilters } from '../actions/blog_actions';
+import { ADD_POST, FEATURE_POST, SET_VISIBILITY_FILTER, SET_TAG_FILTER, UPDATE_PENDING_POST, VisibilityFilters } from '../actions/blog_actions';
 const { SHOW_ALL } = VisibilityFilters;
 
 /* State shape
@@ -15,6 +15,10 @@ const { SHOW_ALL } = VisibilityFilters;
  *      featured: false
  *    }
  *  ],
+ *  pendingPost: {
+ *    title: '',
+ *    body: ''
+ *  }
  *  tags: [
  *    {
  *      id: 1,
@@ -45,6 +49,15 @@ function tagFilter(state = [], action) {
   }
 }
 
+function pendingPost(state = {}, action) {
+  switch(action.type) {
+  case UPDATE_PENDING_POST:
+    return action.postParams;
+  default:
+    return state
+  }
+}
+
 function tags(state = [], action) {
   switch(action.type) {
   default:
@@ -60,7 +73,8 @@ function posts(state = [], action) {
       id: postParams.id,
       title: postParams.title,
       body: postParams.body,
-      featured: postParams.featured
+      featured: postParams.featured,
+      tags: []
     }]
   case FEATURE_POST:
     
@@ -84,7 +98,8 @@ const blogApp = combineReducers({
   visibilityFilter,
   tagFilter,
   posts,
-  tags
+  tags,
+  pendingPost
 });
 
 export default blogApp;
