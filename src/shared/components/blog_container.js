@@ -3,7 +3,7 @@ import { bindActionCreators } from 'redux';
 import { RouteHandler, Link } from 'react-router';
 import PostsIndex from './posts_index';
 import { connect } from 'react-redux';
-import { addPost, featurePost, setVisibilityFilter, VisibilityFilters } from '../actions/blog_actions';
+import { addPost, featurePost, setVisibilityFilter, setTagFilter, VisibilityFilters } from '../actions/blog_actions';
 
 class BlogContainer extends React.Component {
   render() {
@@ -16,6 +16,7 @@ class BlogContainer extends React.Component {
           {...this.props}
           onFilterChange={filter => actions.setVisibilityFilter(filter)}
           onFeaturePost={id => actions.featurePost(id)}
+          onTagFilterChange={tagIds => actions.setTagFilter(tagIds)}
         />
       </div>
     );
@@ -31,14 +32,28 @@ BlogContainer.propTypes = {
   })),
 }
 
-function selectPosts(posts, filter) {
-  switch (filter) {
-  case VisibilityFilters.SHOW_ALL:
+function selectPostsByTag(posts, selectedTagIds) {
+  if (selectedTagIds.length > 0) {
+    return posts.filter(post => {
+      return post.tags.map(tagId => selectedTagIds
+                           .includes(tagId))
+                           .some(result => result === true)
+    });
+  } else {
     return posts;
-  case VisibilityFilters.SHOW_FEATURED:
-    return posts.filter(post => post.featured);
   }
 }
+
+function selectPosts(posts, filter, tagFilter) {
+  // TODO Further filter  with tags
+  switch (filter) {
+  case VisibilityFilters.SHOW_ALL:
+    return selectPostsByTag(posts, tagFilter);
+  case VisibilityFilters.SHOW_FEATURED:
+    return selectPostsByTag(posts.filter(post => post.featured));
+  }
+}
+
 
 function selectActivePost(posts, id) {
   // TODO fetch it if it's not in posts
@@ -48,15 +63,17 @@ function selectActivePost(posts, id) {
 function mapStateToProps(state, ownProps) {
   return {
     allPosts: state.posts,
-    visiblePosts: selectPosts(state.posts, state.visibilityFilter),
+    allTags: state.tags,
+    visiblePosts: selectPosts(state.posts, state.visibilityFilter, state.tagFilter),
     visibilityFilter: state.visibilityFilter,
-    activePost: selectActivePost(state.posts, ownProps.params.postId)
+    activePost: selectActivePost(state.posts, ownProps.params.postId),
+    tagFilter: state.tagFilter
   }
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    actions: bindActionCreators({addPost, featurePost, setVisibilityFilter}, dispatch)
+    actions: bindActionCreators({addPost, featurePost, setVisibilityFilter, setTagFilter}, dispatch)
   }
 }
 
