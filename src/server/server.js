@@ -1,6 +1,7 @@
 import 'babel/polyfill';
 import express from 'express'
 import exphbs from 'express-handlebars';
+import postFixtures from './fixtures/post_fixtures';
 
 const app = express();
 
@@ -10,7 +11,14 @@ app.engine('handlebars', exphbs());
 app.set('view engine', 'handlebars');
 
 app.get('/*', (req, res) => {
-  res.render('index');
+
+  let initialState = {
+    visibilityFilter: 'SHOW_ALL',
+    posts: postFixtures
+  }
+
+  res.render('index', {initialState: JSON.stringify(initialState)});
+
 });
 
 app.listen('8080');

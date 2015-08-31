@@ -8,16 +8,14 @@ import { addPost, featurePost, setVisibilityFilter, VisibilityFilters } from '..
 class BlogContainer extends React.Component {
   render() {
 
-    const { actions, visiblePosts, allPosts, activePost, visibilityFilter } = this.props;
+    const { actions } = this.props;
 
     return (
       <div>
         <RouteHandler
-          posts={visiblePosts}
-          allPosts={allPosts}
+          {...this.props}
           onFilterChange={filter => actions.setVisibilityFilter(filter)}
-          visibilityFilter={visibilityFilter}
-          activePost={activePost}
+          onFeaturePost={id => actions.featurePost(id)}
         />
       </div>
     );

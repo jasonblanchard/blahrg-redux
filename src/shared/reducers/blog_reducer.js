@@ -46,7 +46,7 @@ function posts(state = [], action) {
     return [
       ...state.slice(0, index),
       Object.assign({}, state[index], {
-        featured: true
+        featured: !state[index].featured
       }),
       ...state.slice(index + 1)
     ]
