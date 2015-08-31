@@ -45,12 +45,11 @@ function selectPostsByTag(posts, selectedTagIds) {
 }
 
 function selectPosts(posts, filter, tagFilter) {
-  // TODO Further filter  with tags
   switch (filter) {
   case VisibilityFilters.SHOW_ALL:
     return selectPostsByTag(posts, tagFilter);
   case VisibilityFilters.SHOW_FEATURED:
-    return selectPostsByTag(posts.filter(post => post.featured));
+    return selectPostsByTag(posts.filter(post => post.featured), tagFilter);
   }
 }
 
